@@ -1,0 +1,20 @@
+# образ, в котором установлен Python
+FROM python:3.11-slim
+
+# метка из переменных окружения
+LABEL author=${AUTHOR}
+
+# копирование всех файлов в рабочую директорию контейнера
+COPY . ./ml_service
+
+# назначение рабочей директории Docker
+WORKDIR ml_service
+
+# установка библиотек
+RUN pip3 install -r requirements.txt
+
+# инструкции для открытия порта, указанного в переменных окружения
+EXPOSE ${APP_PORT}
+
+# команда запуска, учитывая порт из .env
+CMD uvicorn ml_service.price_app:app --port ${APP_PORT} --host 0.0.0.0
